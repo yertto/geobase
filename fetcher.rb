@@ -37,6 +37,10 @@ module Fetcher
   end
 
   def get_data(url, cache_file=nil)
-    _get_cache_file_and_data(url, cache_file)[1]
+    if cache_dir
+      _get_cache_file_and_data(url, cache_file)[1]
+    else
+      open(url).read
+    end
   end
 end

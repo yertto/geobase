@@ -6,9 +6,13 @@ require 'json'
 class MapFetcher
   extend Fetcher
 
-  NUM_1 = 50
-  NUM_2 = 200
-  NUM_3 = 100
+  NUM_1 = 50   # TODO - figure out what to do with these numbers
+  NUM_2 = 200  # TODO - figure out what to do with these numbers
+  NUM_3 = 100  # TODO - figure out what to do with these numbers
+
+  def cache_dir
+    ENV['CACHE_DIR']
+  end
 
   def self.fetch_coords(url)
     data = JSON.parse(get_data(url))
@@ -29,6 +33,7 @@ class MapFetcher
 end
 
 if __FILE__ == $0
+  ENV['CACHE_DIR'] ||= Pathname.new('.cache')
   location_id = '/en/victoria'
   location_id = '/en/tasmania'
   location_id = '/en/queensland'
