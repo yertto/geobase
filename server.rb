@@ -23,6 +23,7 @@ end if ENV['SITE_PASSWORD']
 MY_VERSION = File.open(File.dirname(__FILE__) + "/VERSION").read.strip
 
 get '/map/en/:location_id' do
+  response.headers['Cache-Control'] = 'public, max-age=360000'
   url = "http://freebase.com/api/service/geosearch?location=/en/#{params['location_id']}"
   haml :map, :locals => { :path =>  MapFetcher.fetch_path(url) }
 end
@@ -51,6 +52,7 @@ __END__
 
 
 @@ _header
+%a{:href=>"/map/en/victoria"} Victoria
 %a{:href=>"/map/en/tasmania"} Tasmania
 %a{:href=>"/map/en/portugal"} Portugal
 %a{:href=>"/map/en/netherlands"} Netherlands
