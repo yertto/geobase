@@ -50,6 +50,13 @@ __END__
   };
 
 
+@@ _header
+%a{:href=>"/map/en/tasmania"} Tasmania
+%a{:href=>"/map/en/portugal"} Portugal
+%a{:href=>"/map/en/netherlands"} Netherlands
+%a{:href=>"/map/en/south_korea"} South Korea
+%a{:href=>"/map/en/bali"} Bali
+
 @@ _footer
 %footer
   %div.wrapper
@@ -78,6 +85,7 @@ __END__
     %script{:src=>"/javascript/raphael.js", :type=>"text/javascript", :charset=>"utf-8"}
     = yield
   %body
+    = haml :_header
     %div{:id=>'canvas'}
       %div{:id=>'paper'}
     = haml :_footer
