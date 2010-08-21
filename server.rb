@@ -11,6 +11,7 @@ rescue LoadError
 
 require 'sinatra'
 
+require 'helpers'
 require 'map_fetcher'
 
 
@@ -38,7 +39,7 @@ __END__
 @@ map
 :javascript
   window.onload = function () {
-    var R = Raphael("paper", 1200, 5000);
+    var R = Raphael("paper", 500, 300);
     var attr = {
         fill: "#333",
         stroke: "#666",
@@ -48,6 +49,29 @@ __END__
     R.path("#{path}").attr(attr);
   };
 
+
+@@ _footer
+%footer
+  %div.wrapper
+    %p
+      Powered by
+      %a{:href=>"http://github.com/yertto/geobase/blob/v#{MY_VERSION}/server.rb"} this code
+      , hosted by
+      %a{:href=>"http://heroku.com"} heroku
+      ,
+      %a{:href=>"http://www.twitter.com/yertto"}
+        %img{:src=>"http://twitter-badges.s3.amazonaws.com/t_mini-a.png", :alt=>"Follow yertto on Twitter"}
+  :javascript
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-18110397-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+
 @@ layout
 %html
   %head
@@ -56,3 +80,4 @@ __END__
   %body
     %div{:id=>'canvas'}
       %div{:id=>'paper'}
+    = haml :_footer
