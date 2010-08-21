@@ -10,8 +10,8 @@ class MapFetcher
   NUM_2 = 200  # TODO - figure out what to do with these numbers
   NUM_3 = 100  # TODO - figure out what to do with these numbers
 
-  def cache_dir
-    ENV['CACHE_DIR']
+  def self.cache_dir
+    @cache_dir ||= Pathname.new(ENV['CACHE_DIR']) if ENV['CACHE_DIR']
   end
 
   def self.fetch_coords(url)
@@ -33,7 +33,7 @@ class MapFetcher
 end
 
 if __FILE__ == $0
-  ENV['CACHE_DIR'] ||= Pathname.new('.cache')
+  ENV['CACHE_DIR'] ||= '.cache'
   location_id = '/en/victoria'
   location_id = '/en/tasmania'
   location_id = '/en/queensland'
