@@ -13,12 +13,12 @@ get '/location/*/path/*' do
   MapFetcher.fetch_path(location_id, location_type)
 end
 
-get '/location/:location_type' do
-  haml :location, :locals => { :location_type =>  params['location_type'] }
+get '/location' do
+  haml :location
 end
 
 get '/' do
-  redirect '/location/australian_state'
+  redirect '/location'
 end
 
 
@@ -28,54 +28,93 @@ __END__
 @@ _header
 %h1 GeoBase
 %p
-  (retrieves geojson data from 
+  Retrieves
+  %a{:href=>"http://geojson.org"} geojson
+  data from 
   %a{:href=>"http://freebase.com"} freebase
   , then renders it using
   %a{:href=>"http://raphaeljs.com"} raphael
-  )
-Filter:
-- %w(continent country australian_state us_state).each do |location_type|
-  %a{:href=>location_type}= location_type
-  |
-%a{:href=>"http://www.freebase.com/view/location", :target=>"_blank"} more filters...
 
 
 @@ _map
 :javascript
-  $(function() {
-    $("#location").suggest({"type": "/location/#{location_type}"})
-    .bind("fb-select", function(e, data) {
+  var location_type = '/location/location';
 
-      xmlhttp=new XMLHttpRequest();
-      xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-          path = xmlhttp.responseText;
-          var R = Raphael("paper", 300, 200);
-          var attr = {
-            fill: "#333",
-            stroke: "#666",
-            "stroke-width": 1,
-            "stroke-linejoin": "round"
-          };
-          R.path(path).attr(attr);
-        } else {
-          if (xmlhttp.status != 200) {
-            alert("freebase failed to return geometries for "+data.id);
-          }
+  function start_type_suggest(str) {
+    $("#location_type").val(str).data("suggest").textchange();
+  }
+
+  function start_location_suggest(str) {
+    $("#location").val(str).data("suggest").textchange();
+  }
+
+  location_suggest = function(e, data) {
+    xmlhttp=new XMLHttpRequest();
+    document.getElementById('paper').innerHTML = "<img src='/img/ajax-loader.gif'/>";
+    xmlhttp.onreadystatechange=function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+        document.getElementById('paper').innerHTML = "";
+        path = xmlhttp.responseText;
+        var R = Raphael("paper", 800, 500);
+        var attr = {
+          fill: "#333",
+          stroke: "#666",
+          "stroke-width": 1,
+          "stroke-linejoin": "round"
+        };
+        R.path(path).attr(attr);
+      } else {
+        if (xmlhttp.status != 200) {
+          alert("freebase failed to return geometries for "+data.id);
         }
       }
-      xmlhttp.open("GET", "/location/#{location_type}/path"+data.id, true);
-      xmlhttp.send();
+    }
+    xmlhttp.open("GET", location_type+"/path"+data.id, true);
+    xmlhttp.send();
+  };
 
+  $(function() {
+    $("#location_type").suggest({"type": "/type/type", "mql_filter": [{"/type/type/domain": "/location"}]})
+    .bind("fb-select", function(e, data) {
+      location_type = data.id;
+      $("#location").suggest({"type": data.id}).bind("fb-select", location_suggest);
     });
+  });
+
+  $(function() {
+    $("#location").suggest({"type": location_type}).bind("fb-select", location_suggest);
   });
 
 
 @@ location
-= haml :_map, :locals=>{:location_type=>location_type}
+= haml :_map
+- examples = {                             |
+    'Country'          => 'Zimbabwe'     , |
+    'Australian State' => 'Victoria'     , |
+    'US State'         => 'Texas'        , |
+    'US County'        => 'Orange County', |
+  }                                        |
 %form
-  Location:
-  %input{:type=>"text", :id=>"location"}
+  %table{:border=>1}
+    %tr
+      %th
+      %th location
+      %th{:colspan=>examples.keys.size} examples
+    %tr
+      %th type
+      %th
+        %input{:type=>"text", :id=>"location_type"}
+      - examples.keys.each do |typ|
+        %td
+          %a{:href=>'#', :onClick=>"start_type_suggest(#{typ.inspect});"}= typ
+    %tr
+      %th value
+      %td
+        %input{:type=>"text", :id=>"location"}
+      - examples.keys.each do |typ|
+        %td
+          - val = examples[typ]
+          %a{:href=>'#', :onClick=>"start_location_suggest(#{val.inspect});"}= val
 %div{:id=>'canvas'}
   %div{:id=>'paper'}
 
