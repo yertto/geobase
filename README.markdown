@@ -1,4 +1,3 @@
 # GeoBase
 
-First cut at taking geojson shapes from http://freebase.com and drawing them using http://raphaeljs.com
-
+Searching for geojson shapes from http://freebase.com and rendering them using http://raphaeljs.com
