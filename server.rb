@@ -74,6 +74,21 @@ __END__
 
 
 
+@@ _footer
+%footer
+  %div.wrapper
+    %p
+      Powered by
+      = haml :_icon, :locals=>{:url=>"http://ruby-lang.org" , :icon=>"http://ruby-lang.org/favicon.ico"           , :title=>"Ruby code"            }
+      = haml :_icon, :locals=>{:url=>"http://sinatrarb.com" , :icon=>"http://www.sinatrarb.com/images/favicon.ico", :title=>"Sinatra app"          }
+      = haml :_icon, :locals=>{:url=>"http://freebase.com"  , :icon=>"http://freebase.com/favicon.ico"            , :title=>"data from Freebase"   }
+      = haml :_icon, :locals=>{:url=>"http://raphaeljs.com" , :icon=>"http://raphaeljs.com/favicon.ico"           , :title=>"rendered with Raphaël"}
+      = haml :_icon, :locals=>{:url=>"http://heroku.com"    , :icon=>"http://heroku.com/favicon.ico"              , :title=>"hosted by Heroku"     }
+      = ".  Code on"
+      = haml :_icon, :locals=>{:url=>"http://github.com/yertto/geobase/blob/v#{MY_VERSION}/server.rb", :icon=>"http://github.com/favicon.ico", :title=>"v#{MY_VERSION} of code on git"}
+      = ".  Created by"
+      = haml :_icon, :locals=>{:url=>"http://www.google.com/profiles/109591544557457917858", :icon=> "http://www.google.com/profiles/c/photos/public/AIbEiAIAAABECKKP8ZTP3oCOhQEiC3ZjYXJkX3Bob3RvKig1NGI1M2IzZmE3ZGI0NjY3YmIyN2JlOWQwMWU3NmY5MGZlOWM5NTdmMAGH4vIz9l9R4gnwRgptLK1oY43Ufw", :title=>"yertto"}
+
 
 @@ layout
 %html
