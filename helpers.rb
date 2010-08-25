@@ -3,6 +3,7 @@ require 'extlib'
 
 CACHE_MAX_AGE=36000
 
+set :haml, {:format => :html5 }  # XXX - don't think this does anything
 module Sinatra::Templates
   alias :haml_orig :haml
   def haml(template, options={})
@@ -79,3 +80,12 @@ def title
     end
   end
 end
+
+
+template :_icon do
+'%a{:href=>url}<
+  %img{:src=>icon, :title=>title, :height=>16, :width=>16}'
+end
+
+
+
